@@ -195,7 +195,7 @@ public class VeiculosDAO {
             connection = connectionFactory.createConnection();
 
             // Criar um preparedStatement baseado em uma string SQL:
-            String updateSQL = "UPDATE Veiculos SET(marca = ?, modelo = ? , numeroChassi = ? , placa = ? , cor = ? , WHERE id = ?";
+            String updateSQL = "UPDATE Veiculos SET marca = ?, modelo = ? , numeroChassi = ? , placa = ? , cor = ? , WHERE id = ?";
             preparedStatement = connection.prepareStatement(updateSQL);
 
             // Preencher os valores no PreparedStatement:

@@ -1,33 +1,27 @@
 public class Main {
     public static void main(String[] args) {
-        // Criar o DAO para conexão com o banco de dados:
-       VeiculosDAOVeiculosDAO = newVeiculosDAO();
+        VeiculosDAO veiculosDAO = new VeiculosDAO();
 
-        //Criar a tabelaVeiculos no banco de dados:
-       // adicionar  VeiculosDAO.createTable();
-        
-        // Criar umVeiculos:
-       VeiculosVeiculos = newVeiculos();
-       Veiculos.setnome("Ana");
-       Veiculos.setNascimento("2000-06-07");
+        veiculosDAO.createTable();
 
-        // Salvar oVeiculos no banco de dados:
-       Veiculos =VeiculosDAO.create(veiculos);
+        Veiculos veiculo = new Veiculos();
+        veiculo.setmarca("Toyota");
+        veiculo.setmodelo("Corolla");
+        veiculo.setnumeroChassi("12345XYZ");
+        veiculo.setplaca("ABC-1234");
+        veiculo.setcor("Prata");
 
-        // Ler as informações cadastradas no banco de dados:
-       VeiculosDAO.read(veiculos.getId());
+        veiculo = veiculosDAO.create(veiculo);
 
-        // Atualizar as informações doVeiculos:
-       Veiculos.setnome("Ana Silva"); 
-       VeiculosDAO.update(veiculos); 
+        veiculosDAO.read(veiculo.getId());
 
-        // Ler as informações atualizadas no banco de dados:
-       VeiculosDAO.read(veiculos.getId());
+        veiculo.setmarca("Toyota Atualizada");
+        veiculosDAO.update(veiculo);
 
-        // Remover o usário:
-       VeiculosDAO.delete(veiculos);
+        veiculosDAO.read(veiculo.getId());
 
-        // Verificar se as informações foram mesmo removidas:
-       VeiculosDAO.read(veiculos.getId());
+        veiculosDAO.delete(veiculo);
+
+        veiculosDAO.read(veiculo.getId());
     }
 }
