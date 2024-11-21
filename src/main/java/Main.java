@@ -1,33 +1,33 @@
 public class Main {
     public static void main(String[] args) {
         // Criar o DAO para conexão com o banco de dados:
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
+       VeiculosDAOVeiculosDAO = newVeiculosDAO();
 
-        //Criar a tabela usuario no banco de dados:
-        usuarioDAO.createTable();
+        //Criar a tabelaVeiculos no banco de dados:
+       // adicionar  VeiculosDAO.createTable();
         
-        // Criar um usuario:
-        Usuario usuario = new Usuario();
-        usuario.setNome("Ana");
-        usuario.setNascimento("2000-06-07");
+        // Criar umVeiculos:
+       VeiculosVeiculos = newVeiculos();
+       Veiculos.setnome("Ana");
+       Veiculos.setNascimento("2000-06-07");
 
-        // Salvar o usuario no banco de dados:
-        usuario = usuarioDAO.create(usuario);
+        // Salvar oVeiculos no banco de dados:
+       Veiculos =VeiculosDAO.create(veiculos);
 
         // Ler as informações cadastradas no banco de dados:
-        usuarioDAO.read(usuario.getId());
+       VeiculosDAO.read(veiculos.getId());
 
-        // Atualizar as informações do usuario:
-        usuario.setNome("Ana Silva"); 
-        usuarioDAO.update(usuario); 
+        // Atualizar as informações doVeiculos:
+       Veiculos.setnome("Ana Silva"); 
+       VeiculosDAO.update(veiculos); 
 
         // Ler as informações atualizadas no banco de dados:
-        usuarioDAO.read(usuario.getId());
+       VeiculosDAO.read(veiculos.getId());
 
         // Remover o usário:
-        usuarioDAO.delete(usuario);
+       VeiculosDAO.delete(veiculos);
 
         // Verificar se as informações foram mesmo removidas:
-        usuarioDAO.read(usuario.getId());
+       VeiculosDAO.read(veiculos.getId());
     }
 }

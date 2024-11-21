@@ -4,7 +4,7 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class UsuarioDAO {
+public class VeiculosDAO {
     public void createTable() {
         Connection connection = null;
         Statement statement = null;
@@ -16,15 +16,18 @@ public class UsuarioDAO {
 
             // Criar um statement baseado em uma string SQL:
             String createTableSQL = """
-                      CREATE TABLE IF NOT EXISTS usuario (
+                      CREATE TABLE IF NOT EXISTS Veiculos (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        nome VARCHAR(256) NOT NULL,
-                        nascimento TEXT
+                        marca VARCHAR(256) NOT NULL,
+                        modelo VARCHAR(256) NOT NULL,
+                        numeroChassi VARCHAR(256) NOT NULL,
+                        placa VARCHAR(256) NOT NULL,
+                        cor VARCHAR(256) NOT NULL
                       );
                     """;
             statement = connection.createStatement();
             statement.execute(createTableSQL);
-            System.out.println("Tabela 'usuario' criada ou já existe!");
+            System.out.println("Tabela 'Veiculos' criada ou já existe!");
         } catch (SQLException e) {
             System.err.println("Erro na comunicação com o banco de dados!");
             e.printStackTrace();
@@ -40,7 +43,7 @@ public class UsuarioDAO {
         }
     }
 
-    public Usuario create(Usuario usuario) {
+    public Veiculos create(Veiculos Veiculos) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -50,22 +53,31 @@ public class UsuarioDAO {
             connection = connectionFactory.createConnection();
 
             // Criar um preparedStatement baseado em uma string SQL:
-            String insertSQL = "INSERT INTO usuario (nome, nascimento) values (?, ?)";
+            String insertSQL = "INSERT INTO Veiculos (marca, modelo, numeroChassi, placa , cor) values (?, ? , ? , ? ,? )";
             preparedStatement = connection.prepareStatement(insertSQL);
 
             // Preencher os valores no PreparedStatement:
-            preparedStatement.setString(1, usuario.getNome());
-            preparedStatement.setString(2, usuario.getNascimento());
+            preparedStatement.setString(1, Veiculos.getmarca());
+            preparedStatement.setString(2, Veiculos.getmodelo());
+            preparedStatement.setString(3, Veiculos.getnumeroChassi());
+            preparedStatement.setString(4, Veiculos.getplaca());
+            preparedStatement.setString(5, Veiculos.getcor());
+            
 
             // Executar o comando SQL:
             preparedStatement.execute();
-            usuario.setId(this.readLastInsertedId(connection));
+            Veiculos.setId(this.readLastInsertedId(connection));
 
             System.out.println(
-                    "USUÁRIO GRAVADO NO BANCO DE DADOS: " +
-                            "\nID: " + usuario.getId() +
-                            "\nNOME: " + usuario.getNome() +
-                            "\nDATA DE NASCIMENTO: " + usuario.getNascimento());
+                    "VEICULO GRAVADO NO BANCO DE DADOS: " +
+                            "\nID: " + Veiculos.getId() +
+                            "\nmarca: " + Veiculos.getmarca() +
+                            "\nModelo: " + Veiculos.getmodelo()+
+                            "\nNumero do Chassi: " + Veiculos.getnumeroChassi()+
+                            "\nPlaca: " + Veiculos.getplaca()+
+                            "\nCor: " + Veiculos.getcor());
+
+
         } catch (SQLException e) {
             System.err.println("Erro na comunicação com o banco de dados!");
             e.printStackTrace();
@@ -79,7 +91,7 @@ public class UsuarioDAO {
                 e.printStackTrace();
             }
         }
-        return usuario;
+        return Veiculos;
     }
 
     public int readLastInsertedId(Connection connection) {
@@ -89,7 +101,7 @@ public class UsuarioDAO {
 
         try {
             // Criar um preparedStatement baseado em uma string SQL:
-            String selectSQL = "SELECT MAX(id) AS max_id FROM usuario";
+            String selectSQL = "SELECT MAX(id) AS max_id FROM Veiculos";
             preparedStatement = connection.prepareStatement(selectSQL);
 
             // Executar o comando SQL:
@@ -115,8 +127,8 @@ public class UsuarioDAO {
         return lastInsertedId;
     }
 
-    public Usuario read(int id) {
-        Usuario usuario = null;
+    public Veiculos read(int id) {
+        Veiculos Veiculos = null;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -127,7 +139,7 @@ public class UsuarioDAO {
             connection = connectionFactory.createConnection();
 
             // Criar um preparedStatement baseado em uma string SQL:
-            String selectSQL = "SELECT * FROM usuario WHERE id = ?";
+            String selectSQL = "SELECT * FROM Veiculos WHERE id = ?";
             preparedStatement = connection.prepareStatement(selectSQL);
 
             // Preencher o valor do identificador no PreparedStatement:
@@ -136,17 +148,24 @@ public class UsuarioDAO {
             // Executar o comando SQL:
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                usuario = new Usuario();
-                usuario.setId(resultSet.getInt("id"));
-                usuario.setNome(resultSet.getString("nome"));
-                usuario.setNascimento(resultSet.getString("nascimento"));
+                Veiculos = new Veiculos();
+                Veiculos.setId(resultSet.getInt("id"));
+                Veiculos.setmarca(resultSet.getString("Marca"));
+                Veiculos.setmodelo(resultSet.getString("Modelo"));
+                Veiculos.setnumeroChassi(resultSet.getString("Numero Chassi"));
+                Veiculos.setplaca(resultSet.getString("Placa"));
+                Veiculos.setcor(resultSet.getString("Cor"));                
+                
                 System.out.println(
-                        "USUÁRIO LIDO DO BANCO DE DADOS: " +
-                                "\nID: " + usuario.getId() +
-                                "\nNOME: " + usuario.getNome() +
-                                "\nDATA DE NASCIMENTO: " + usuario.getNascimento());
+                        "VEICULO LIDO DO BANCO DE DADOS: " +
+                                "\nID: " + Veiculos.getId() +
+                                "\nMarca: " + Veiculos.getmarca() +
+                                "\nModelo: " + Veiculos.getModelo()+
+                                "\nNumero do Chassi: " + Veiculos.getnumeroChassi()+
+                                "\nPlaca: " + Veiculos.getplaca()+
+                                "\nCor: " + Veiculos.getcor());
             } else {
-                System.out.println("Usuário não encontrado!");
+                System.out.println("Veiculo não encontrado!");
             }
         } catch (SQLException e) {
             System.err.println("Erro na comunicação com o banco de dados!");
@@ -163,10 +182,10 @@ public class UsuarioDAO {
                 e.printStackTrace();
             }
         }
-        return usuario;
+        return Veiculos;
     }
 
-    public void update(Usuario usuario) {
+    public void update(Veiculos Veiculos) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -176,18 +195,21 @@ public class UsuarioDAO {
             connection = connectionFactory.createConnection();
 
             // Criar um preparedStatement baseado em uma string SQL:
-            String updateSQL = "UPDATE usuario SET nome = ?, nascimento = ? WHERE id = ?";
+            String updateSQL = "UPDATE Veiculos SET(marca = ?, modelo = ? , numeroChassi = ? , placa = ? , cor = ? , WHERE id = ?";
             preparedStatement = connection.prepareStatement(updateSQL);
 
             // Preencher os valores no PreparedStatement:
-            preparedStatement.setString(1, usuario.getNome());
-            preparedStatement.setString(2, usuario.getNascimento());
-            preparedStatement.setInt(3, usuario.getId());
+            preparedStatement.setString(1, Veiculos.getmarca());
+            preparedStatement.setString(2, Veiculos.getModelo());
+            preparedStatement.setString(3, Veiculos.getnumeroChassi());
+            preparedStatement.setString(4, Veiculos.getplaca());
+            preparedStatement.setString(5, Veiculos.getcor());          
+            preparedStatement.setInt(6, Veiculos.getId());
 
             // Executar o comando SQL:
             preparedStatement.executeUpdate();
 
-            System.out.println("O usuário " + usuario.getNome() + " foi atualizado no banco de dados!");
+            System.out.println("O veiculo " + Veiculos.getmarca() + " foi atualizado no banco de dados!");
         } catch (SQLException e) {
             System.err.println("Erro na comunicação com o banco de dados!");
             e.printStackTrace();
@@ -203,7 +225,7 @@ public class UsuarioDAO {
         }
     }
 
-    public void delete(Usuario usuario) {
+    public void delete(Veiculos Veiculos) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
 
@@ -213,16 +235,16 @@ public class UsuarioDAO {
             connection = connectionFactory.createConnection();
 
             // Criar um preparedStatement baseado em uma string SQL:
-            String deleteSQL = "DELETE FROM usuario WHERE id = ?";
+            String deleteSQL = "DELETE FROM Veiculos WHERE id = ?";
             preparedStatement = connection.prepareStatement(deleteSQL);
 
             // Preencher os valores no PreparedStatement:
-            preparedStatement.setInt(1, usuario.getId());
+            preparedStatement.setInt(1, Veiculos.getId());
 
             // Executar o comando SQL:
             preparedStatement.execute();
 
-            System.out.println("O usuario " + usuario.getNome() + " foi removido do BD.");
+            System.out.println("O Veiculos " + Veiculos.getmarca() + " foi removido do BD.");
         } catch (SQLException e) {
             System.err.println("Erro na comunicação com o banco de dados!");
             e.printStackTrace();
